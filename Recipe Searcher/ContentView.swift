@@ -22,7 +22,9 @@ struct ContentView: View {
                 Text("Search")
                     .padding(.top)
             }
-            Spacer()
+            List {
+                /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Content@*/Text("Content")/*@END_MENU_TOKEN@*/
+            }
         }
 
     }
