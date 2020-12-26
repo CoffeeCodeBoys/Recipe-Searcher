@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @State var results = [Hit]()
+    
     var body: some View {
         VStack {
             HStack {
@@ -22,11 +25,35 @@ struct ContentView: View {
                 Text("Search")
                     .padding(.top)
             }
-            List {
-                /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Content@*/Text("Content")/*@END_MENU_TOKEN@*/
-            }
+            
+            List(results, id: \.recipe.label) {item in
+                VStack(alignment: .leading) {
+                    Text(item.recipe.label)
+                    Text("Hi!")
+                }
+            }.onAppear(perform: loadData)
         }
+    }
+    
+    func loadData() {
+        guard let url = URL(string: "https://api.edamam.com/search?q=chicken&app_id=114cbe69&app_key=93c42eb233a8e16e4c0c1c6a67cc8d22") else {
+            print("Your API end point is Invalid")
+            return
+        }
+        let request = URLRequest(url: url)
 
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let data = data {
+
+                if let response = try? JSONDecoder().decode([Hit].self, from: data) {
+                    DispatchQueue.main.async {
+                        print(response)
+                        self.results = response
+                    }
+                    return
+                }
+            }
+        }.resume()
     }
 }
 
