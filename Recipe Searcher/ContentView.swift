@@ -9,7 +9,9 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State var results = [Hit]()
+    let recipes: [Recipe]
+    
+    @State var results = [Root]()
     
     var body: some View {
         VStack {
@@ -25,14 +27,16 @@ struct ContentView: View {
                 Text("Search")
                     .padding(.top)
             }
+            List {
+
+            }
             
-            List(results, id: \.recipe.label) {item in
-                VStack(alignment: .leading) {
-                    Text(item.recipe.label)
-                    Text("Hi!")
-                }
-            }.onAppear(perform: loadData)
-        }
+            //            List(results, id: Root.recipe) {item in
+//                VStack(alignment: .leading) {
+//                    Text(item.recipe.label)
+//                }
+//            }.onAppear(perform: loadData)
+        }.onAppear(perform: loadData)
     }
     
     func loadData() {
@@ -45,7 +49,7 @@ struct ContentView: View {
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let data = data {
 
-                if let response = try? JSONDecoder().decode([Hit].self, from: data) {
+                if let response = try? JSONDecoder().decode([Root].self, from: data) {
                     DispatchQueue.main.async {
                         print(response)
                         self.results = response
